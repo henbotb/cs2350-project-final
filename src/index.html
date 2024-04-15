@@ -1,27 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Project Starter</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="index,follow" />
-    <meta name="description" content="TODO: A starter project for ..." />
 
-    <link rel="stylesheet" href="./stylesheets/main.css" />
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <title>Classic games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <meta name="description" content="TODO: A starter project for ..." />
 
-  <body>
-    <!-- Your HTML goes here -->
-    <h1 class="display-2 text-center my-5 py-5">
-      <span class="d-block py-5">
-        <i class="bi bi-filetype-html text-primary"></i>
-        <i class="bi bi-filetype-css text-danger"></i>
-        <i class="bi bi-filetype-js text-success"></i>
-      </span>
+  <link rel="stylesheet" href="./stylesheets/main.css" />
+</head>
 
-      Welcome to CS 2350!
-    </h1>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="#">What's next?</a>
+          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" aria-disabled="true">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-    <script type="module" src="./javascripts/main.js"></script>
-  </body>
+  <div class="text-center bg-image d-flex align-items-center justify-content-center mb-4" id="main-home-jumbotron">
+    <div class="mask">
+        <div class="text-white">
+          <h1 class="mt-4">A library of poorly implemented games</h1>
+          <h4 class="my-3">More coming soon!</h4>
+          <a class="btn btn-outline-light btn-lg" href="#scrollpoint-1" role="button">Go to games</a>
+        </div>
+    </div>
+  </div>
+
+  <div class="container pt-1" id="scrollpoint-1">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Tetris</h1>
+          <p class="h5 ms-4 me-4">A crass implementation of tetris using the p5js library. Keep playing to your heart's content because it certaintly isn't getting harder or faster.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Flappy Bird</h1>
+          <p class="h5 ms-4 me-4">The game the took the world by storm is shockingly simple coding wise. Play the world renowned game ripped of all the charm (and Nintendo copyright enfringment) that the original had.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Pong</h1>
+          <p class="h5 ms-4 me-4">1 or 2 player pong. You cannot win against the 2 player so it's more of a practice mode than anything.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="ponggame.html" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="pongdesc.html" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Tic Tac Toe</h1>
+          <p class="h5 ms-4 me-4">1 or 2 player Tic Tac Toe. Unlike pong, there are different difficulties. "Hard" is literally impossible, medium is literally half impossible half random, and easy is random. The hard mode is implemented via an alpha-beta pruning minimax algorithm.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Mine Sweeper</h1>
+          <p class="h5 ms-4 me-4">Classic minesweeper game of 3 different sizes, and 3 different difficulties. Test your speed.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="./minesweepergame.html" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="./minesweeperdesc.html" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 pb-4">
+        <div class="card-body bg-dark text-light rounded-3 m-1">
+          <img src="https://placehold.co/600x400" alt="" class="img-fluid rounded-top-3 btn-stretch">
+          <h1 class="ms-25 mt-2">Snake</h1>
+          <p class="h5 ms-4 me-4">The other major contender for the most "classic game" of all time award. Play a pixelated snake game.</p>
+          <div class="container-fluid">
+            <div class="row row-cols-lg-2 row-cols-sm-1">
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-success btn-stretch m-25 me-2">Link to game</a></div>
+              <div class="col-md-6 col-12 d-flex p-0"><a href="" class="btn btn-outline-light m-25 ms-2 btn-stretch">How it's made</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- 
+      emmet code for creating the cards
+      div.row.row-cols-lg-3.row-cols-md-2.row-cols-sm-1>(div.col-lg-4.col-md-6.col-12.pb-4>div.card-body.bg-dark.text-light.rounded-3.m-1>img.img-fluid.rounded-top-3.btn-stretch[src="https://placehold.co/600x400"]+h1.ms-25.mt-2{Game title}+p.h5.ms-4{Game description}+div.container-fluid>div.row.row-cols-lg-2.row-cols-sm-1>((div.col-md-6.col-12.d-flex.p-0>(a.btn.btn-success.btn-stretch.m-25.me-2{Link to game}))+(div.col-md-6.col-12.d-flex.p-0>(a.btn.btn-outline-light.m-25.ms-2.btn-stretch{How it's made}))))*6 -->
+
+
+  <script type="module" src="./javascripts/main.js"></script>
+</body>
+
 </html>
+
+
+<!-- https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D -->

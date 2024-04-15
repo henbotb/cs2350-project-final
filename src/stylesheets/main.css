@@ -1,3 +1,33 @@
-/* Your styles go here */
 @import url("bootstrap/dist/css/bootstrap.min.css");
 @import url("bootstrap-icons/font/bootstrap-icons.css");
+
+#main-home-jumbotron {
+    background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f');
+    height: 500px;
+    background-size: 100%;
+    background-position: center;
+}
+
+.btn-stretch {
+    width: 100%;
+}
+
+.m-25 {
+    margin: 1.25rem;
+}
+
+.ms-25 {
+    margin-left: 1.25rem;
+}
+
+@media (max-width: 576px) {
+    #main-home-jumbotron {
+        height:576px;
+    }
+}
+
+@media (max-width: 768px) {
+    #main-home-jumbotron {
+        height: 400px;
+    }
+}
