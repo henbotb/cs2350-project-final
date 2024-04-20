@@ -3,17 +3,18 @@
 
 <head>
   <meta charset="utf-8"/>
-  <title>Pong</title>
+  <title>Snake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="index,follow" />
-  <meta name="description" content="TODO: A starter project for ..." />
+  <meta name="description" content="Snake Game" />
 
-  <link rel="stylesheet" href="./stylesheets/pong.css" />
+  <link rel="stylesheet" href="./stylesheets/flappybird.css" />
   <script type="module" src="./javascripts/main.js"></script>
 
 </head>
 
 <body>
+  <div class="page d-flex flex-column min-vh-100">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">Home</a>
@@ -31,13 +32,19 @@
     </div>
   </nav>
 
-
-  <div class="canvas-container">
-    <script src="./javascripts/pong.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <div class="main container flex-grow-1">
+      <div class="webpage">
+          <div id="canvas-container" class="pt-5">
+              <script src="./javascripts/snake.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+          </div>
+      </div>
+      <div class="d-flex justify-content-center">
+          <a href="snakedesc.html" class="btn btn-outline-dark">See how this was made!</a>
+      </div>
+    </div>
+    <footer class="text-light bg-dark text-center py-2 fs-5">&copy;2024 All rights reserved</footer>
   </div>
-  <a href="pongdesc.html" class="btn btn-outline-dark align-content-center">See how this was made!</a>
-
 </body>
 
 </html>

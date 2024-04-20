@@ -1,0 +1,32 @@
+@import url("bootstrap/dist/css/bootstrap.min.css");
+@import url("bootstrap-icons/font/bootstrap-icons.css");
+
+.beforeandafter {
+    width: 100% !important;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.black {
+    background-color: black;
+}
+
+code {
+
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+}
+
+.code-text {
+    font-size: 1.15rem;
+}
+
+.main {
+    height: calc(100vh - 102px)
+}

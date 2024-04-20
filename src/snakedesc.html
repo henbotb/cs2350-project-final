@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>How it's made: Snake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <meta name="description" content="TODO: A starter project for ..." />
+
+  <link rel="stylesheet" href="./stylesheets/blogpost.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="whatsnext.html">What's next?</a>
+          <a class="nav-link" href="about.html">About</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center">The making of: Pong</h1>
+    <h2>Part 1: Reflecting on past mistakes</h2>
+    <p class="fs-4">
+      Snake is a game that I've made plenty of times over various different programming languages. 
+      All implementations were subpar to say the best. In times prior where the snakes body has been represented by arrays of coordinate pairs, 
+      or 2d array to represent only where the body is, I decided this time to maybe make a more "efficient" structure.</p>
+    <p class="fs-4">
+      This time, I still used a 2d array to represent the "grid" for snake, but instead of using a sort of binary representation of snakes body and not snakes body, I decided to have the snakes body represented as such:
+    </p>
+      <p class="fs-4">Snake body pieces > 0</p>
+      <p class="fs-4">Snake head = highest positive integer in array</p>
+      <p class="fs-4">Apples = -1</p>
+
+
+    <p class="fs-4">This works out extremely nicely, because you can simply hold the current direction of the snake,
+       set the next time in that direction to be the snakes length + 1, 
+       then iterate over all non-zero non-negative tiles and remove 1 to simulate motion. 
+      The whole of the snake movement and apple collection was the following:</p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text">
+    // Snake eats the apple
+    if (grid[sNewY][sNewX] === apple) { 
+        sLength++;
+        grid[sNewY][sNewX] = sLength; // Increase snake length
+        return generateApple(); // Generate a new apple
+    } else { // Normal movement
+        // Move snake forward
+        grid[sNewY][sNewX] = sLength + 1; 
+        // Decrease the value of snake parts to simulate movement
+        for (let y = 0; y &lt; gRows; y++) {
+            for (let x = 0; x &lt; gCols; x++) {
+                if (grid[y][x] > 0) grid[y][x]--;
+            }
+        }
+    }
+      </code></pre>
+    </div>
+    <p class="fs-4">In retrospect, this could've been likely done in one grid.map function, but here we are.</p>
+    <p class="fs-4">This datatype also worked incredibly well for collisions,
+       both because when the the snakes next tile exceeded the grid length or was less than 0, 
+       you knew it went out of bounds, and because when the snake was trying to go to a tile was > 0, 
+       it'd be considered a self collision. This was the entirety of the gameplay mechanics collectively:
+    </p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text">
+    if (sNewX >= gCols || sNewY >= gRows || sNewX &lt; 0 || sNewY &lt; 0) {
+      console.log(`Snake hit the wall at new x: ${sNewX}, new y: ${sNewY}`);
+      return 11; // Game over condition
+    }
+
+    // Check if the snake runs into itself
+    if (grid[sNewY][sNewX] > 0) {
+        console.log(`Snake ran into itself at new x: ${sNewX}, new y: ${sNewY}`);
+        return 11; // Game over condition
+    }
+      </code></pre>
+    </div>
+    <h2 class="mt-5">Part 2: Drawing the game</h2>
+    <p class="fs-4">Next came actually displaying the board. This was surprisingly trivial.</p>
+    <p class="fs-4">I simply iterated over every single segment of the array and drew a rectangle at the index * tileWidth, 
+      which was calculated as canvasWidth / gridWidth. To add some styling, 
+      I decided to make it so that the colors would alternate by taking the modulo of the array indexes added together and choose a color based on the result. 
+      A simliar process was done for rendering the snake. 
+      </p>
+      <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+        <pre><code class="code-text">   
+    function drawBoard() { 
+      for (let y = 0; y &lt; gRows; y++) {
+          for (let x = 0; x &lt; gCols; x++) {
+              let ctValue = grid[y][x]; // current tile value
+              if (ctValue === apple) {
+                  fill('#B64B2B'); // apple color
+              } else if (ctValue === 0) {
+                  if ((x + y) % 2 === 0) {
+                      fill('#DED8FD'); // empty tile color 1
+                  } else {
+                      fill('#CFC5FC'); // empty tile color 2
+                  }
+              } else if (ctValue > 0) {
+                  // Color the snake based on whether the segment number is odd or even
+                  if (ctValue % 2 === 1) {
+                      fill('#04A777'); // color for odd segments
+                  } else {
+                      fill('#093A3E'); // color for even segments
+                  }
+              }
+              rect(x * tWidth, y * tHeight, tWidth, tHeight); // Draw the tile
+          }
+      }
+  }</code></pre>
+      </div>
+      <p class="fs-4">You may also notice this ctValue that is used to track the value of the current tile, 
+        this is used to make it so that the snake doesn't "flash." Before, every time the snake moved a tile, 
+        the "head" of the snake would switch colors because the snakes tiles were directly related to that of the indexes added together, 
+        by making it based off of the snake values, 
+        it guarantees that the color will remain constant when moving, ridding it of this "flashing" effect.
+        </p>
+      <p class="fs-4">All that was left is pieceing everything together and adding some screens for interaction.</p>
+
+    <h2 class="mt-5">Part 3: Finishing touches</h2>
+    <p class="fs-4">At this point, basically everything was (should've been) trivial. I added in a score system, some text to display upon collisions and a key input for resetting, etc.</p>
+    <p class="fs-4">This time though, I did want to make the "You lost" screen a little fancier, so I made it blur. I'm not sure why but this complicated everything, and made the process much more bug heavy. Though I did eventually get it done, I had to refactor my whole win/loss code and "press to restart" handling.</p>
+    <p class="fs-4">I also had to make the apple generation process, which is EXTREMELY inneficient as it simply chooses randomly until it finds a valid tile to place a tile on, which means that it could in theory take 100+ attempts on a 10 by 10 grid. If I were to redo this, it'd likely make much more sense to compile all the empty tiles then choose from that.</p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text"> 
+    // Check if the grid is full (snake occupies all but one space)
+    if (sLength > gRows * gCols) {
+      return 1; // Indicate game over (grid full)
+    }
+  
+    while (true) {
+      // Generate random coordinates for the apple
+      const appleX = Math.floor(random(0, gCols)); // Floor the value for array access
+      const appleY = Math.floor(random(0, gRows)); // Floor the value for array acces
+  
+      // Check if the space is empty and place the apple if so
+      if (grid[appleY][appleX] === 0) {
+        grid[appleY][appleX] = apple;
+        return 0; // Indicate successful placement
+      }
+    }
+  </code></pre>
+    </div>
+    <p class="fs-4">There is a win condition, and that is recognized internally, but the likelihood of that state ever being reached is implausible for many reasons, so I decided to not worry about it.</p>
+    <p class="fs-4">The current only issue with the game (that is known of, at this current moment) is that there's the ability to turn back on yourself and instantly die if you do 2 movements inside the same frame, as that isn't handled properly. You have to be looking for it/trying to get that interaction though, so it's not of any major concern.</p>
+    <p class="fs-4">You can view the full source code <a href="snakesc.html">here</a> and play the game <a href="snake.html">here</a></p>
+  </div>
+  <footer class="text-light bg-dark text-center py-2 fs-5">&copy;2024 All rights reserved</footer>
+  <script type="module" src="./javascripts/main.js"></script>
+</body>
+
+</html>

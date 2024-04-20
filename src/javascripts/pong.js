@@ -5,7 +5,7 @@ const hard = 2;
 const canvasHeight = 500;
 const canvasWidth = 500;
 
-const paddleSpeed = 10;
+const paddleSpeed = 15;
 const paddleWidth = 20;
 const paddleHeight = 100;
 const paddleLeftX = 20;
@@ -17,7 +17,7 @@ let gameTypeChosen = false;
 let paddleLeftY = 250 - (Math.floor(paddleHeight / 2));
 let paddleRightY = 250 - (Math.floor(paddleHeight / 2));
 
-const ballSpeed = 2;
+const ballSpeed = 3;
 const ballSize = 20;
 let ballDirection = [0, 0]; // maybe come up with a better way of initializing the direction
 let ballGoingRight = true;
@@ -174,20 +174,11 @@ For some reason, I cannot figure out how to center it without messing up the web
 
 */
 
-function centerCanvas() {
-    let x = (windowWidth - width) / 2;
-    let y = (windowHeight - height) / 2;
-    cnv.position(x, y);
-}
-
-function windowResized() {
-    centerCanvas();
-}
 
 function setup() {
     setBall();
-    cnv = createCanvas(canvasHeight, canvasWidth);
-    centerCanvas();
+    let cnv = createCanvas(canvasHeight, canvasWidth);
+    cnv.parent('canvas-container')
 }
 
 function draw() {

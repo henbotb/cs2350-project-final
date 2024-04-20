@@ -3,17 +3,143 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Classic games</title>
+  <title>How it's made: Pong</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="index,follow" />
-  <meta name="description" content="TODO: A starter project for ..." />
+  <meta name="description" content="How to program pong" />
 
-  <link rel="stylesheet" href="./stylesheets/main.css" />
-  <script type="module" src="./javascripts/main.js"></script>
+  <link rel="stylesheet" href="./stylesheets/blogpost.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="whatsnext.html">What's next?</a>
+          <a class="nav-link" href="about.html">About</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </div>
+      </div>
     </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center">The making of: Pong</h1>
+    <h2>Part 1: Gameplay</h2>
+    <p class="fs-4">
+      Pong is one of the most simply games practically speaking, so to begin with I simply initalized many different variables: 
+      the ball and it's relevant information and the paddles and their important information.
+       I then proceeded to draw the paddles and ball to the canvas just to get a feel for things.</p>
+
+    <p class="fs-4">The first part of the actual gameplay that was important to have, was the movement for the ball.
+       I simply introduced a basic moment for the ball in the variable ballDirection. 
+       Since there is no gravity or friction in pong, there was no need to change the velocity vectors throughout,
+        except for when it hits a paddle or wall. </p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text">
+  if(
+    (newY + ballSize / 2 > canvasHeight) ||
+    (newY - ballSize / 2 &lt; 0)
+    ) {
+        // ballDirection[1] = 0;
+        ballDirection[1] *= -1;
+    } // canvas edge detection
+
+  
+  ballDirection[0] += ((ballDirection[0] &lt; 3) && (ballDirection[0] > 0)) ? randInt(1, 3) : ((ballDirection[0] > -3) && (ballDirection[0] &lt; 0)) ? randInt(-1, -3) : 0; 
+
+  ballDirection[1] += ((ballDirection[1] &lt; 3) && (ballDirection[1] > 0)) ? randInt(1, 3) : ((ballDirection[1] > -3) && (ballDirection[1] &lt; 0)) ? randInt(-1, -3) : 0;
+
+  ballCoords[0] += ballDirection[0]; // update ball value
+  ballCoords[1] += ballDirection[1];</code></pre>
+    </div>
+    <p class="fs-4">When it did hit a wall, I would simply reflect the vector (multiply it by -1) so that it would simulate a "bounce."
+       Originally for testing, this would happen on any wall, but that was later reworked to be used to detect scoring. This </p>
+    <p class="fs-4">Then, using the keyIsDown(arrowKey), I implemented movement for the paddles. Initially they just went up until the paddle Speed + the padle length would go out of
+      the canvas, then later I made is that it did the maximum between the moveSpeed and the remaining space, such that it'd go flush to the edge of the screen. 
+    </p>
+    <div class="container-fluid"> <!-- before and after start-->
+      <div class="beforeandafter row">
+        <div class="col-md-6 col-sm-12">
+          <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+            <h2 class="text-center">Before</h2>
+            <pre><code class="code-text"> if (keyIsDown(UP_ARROW) <span class="red">&& paddleRightY - paddleSpeed &lt; canvasHeight</span>) {
+     paddleRightY <span class="red">-</span>= <span class="red">paddleSpeed</span>;
+     // Prevents going above canvas
+ }
+            </code></pre>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+            <h2 class="text-center">After</h2>
+            <pre><code class="code-text"> if (keyIsDown(UP_ARROW)) {
+     paddleRightY = <span class="green">max(0, paddleRightY - paddleSpeed)</span>;  
+     // Prevents going above canvas
+ }
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </div> <!-- before and after end-->
+    <h2 class="mt-5">Part 2: The only gameplay mechanic, collision</h2>
+    <p class="fs-4">Thankfully, because collision is basically the only gameplay mechanic of pong, it was relatively easy to complete. </p>
+    <p class="fs-4">I hand drew some basic parameters to making the collision between the right edge of the left paddle, and the left edge of the right paddle and the ball, and simply reflected the ball velocity when collisions occured. This poorly implemented collision looked as follows:</p>
+      <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+        <pre><code class="code-text">
+  if( 
+    ((newX + (ballSize / 2) > paddleRightX) && ((ballCoords[1] &lt; paddleRightY + paddleHeight) && (ballCoords[1] > paddleRightY))) ||
+    ((newX - (ballSize / 2) &lt; paddleLeftX + paddleWidth) && ((ballCoords[1] &lt; paddleLeftY + paddleHeight) && (ballCoords[1] > paddleLeftY))) // paddle collision detection
+    ){
+        ballDirection[0] *= -1; // reflect x velocity
+        if(ballDirection[0] >= 10) {
+            ballDirection[0] -= 2 * Math.random(); // bump value for variablity in gameplay and not perfect
+        } else if(ballDirection[0] &lt;= -10 || randInt(0, 1) == 0) {
+            ballDirection[0] += 2 * Math.random();
+        } else {
+            ballDirection[0] -= 2 * Math.random();
+        }
+
+        if(ballDirection[1] >= 10) {
+            ballDirection[1] -= 2 * Math.random();
+        } else if(ballDirection[1] &lt;= -10 || randInt(0, 1) == 0) {
+            ballDirection[1] += 2 * Math.random();
+        } else {
+            ballDirection[1] -= 2 * Math.random();
+        }
+
+    }</code></pre>
+      </div>
+      <p class="fs-4">You may also notice, that there is some extra value being added to the ball velocity,
+         this is to add some variation to the gameplay and not make it entirely predictable, 
+         otherwise the players would be able to lock their paddles in spots that moves the ball back and forth to no end.
+        </p>
+      <p class="fs-4">With that, everything that the game needed to be called "functional" was in.</p>
+
+    <h2 class="mt-5">Part 3: Finishing touches</h2>
+    <p class="fs-4">After getting all of the gameplay mechanics in, I simply added an internal score between left and right, and displayed it to screen, this was calculated when the ball goes out of bounds on the left or right edge of the canvas</p>
+    <p class="fs-4">In my original vision for this game, I wanted to have some sort of pong "ai" to play against the player, due to time restraints that was simply not a possibility, so I ended up making "1 player mode" where the paddle continually follows the height of the ball.</p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text"> 
+  if(!isTwoPlayer) {
+    paddleLeftY = ballCoords[1] - paddleHeight / 2
+  }</code></pre>
+    </div>
+    <p class="fs-4">All that was left was making a start screen, and originally this was going to have a win condition, but I ended up leaving it as endless.</p>
+    <p class="fs-4">The current only issue with the game (that is known of, at this current moment) is an issue where the ball collides with the top or bottom part of a paddle and jitters around in side, I have a prototyped fix but it's not consistent yet.</p>
+    <p class="fs-4">You can view the full source code <a href="pongsc.html">here</a> and play the game <a href="pong.html">here</a></p>
+  </div>
+  <footer class="text-light bg-dark text-center py-2 fs-5">&copy;2024 All rights reserved</footer>
+  <script type="module" src="./javascripts/main.js"></script>
 </body>
+
+</html>

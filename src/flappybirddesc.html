@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>How it's made: Flappy Bird</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+  <meta name="description" content="How to program flappy bird" />
+
+  <link rel="stylesheet" href="./stylesheets/blogpost.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="whatsnext.html">What's next?</a>
+          <a class="nav-link" href="about.html">About</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-center">The making of: Flappy Bird</h1>
+    <h2>Part 1: The Basics</h2>
+    <p class="fs-4">The project started as a throwaway challenge to myself to see how quickly I could get the basic
+      movement of flappy bird down. In roughly 20 minutes I had the basic idea, click (later switched to the space bar),
+      and the bird would go up.</p>
+    <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+      <pre><code class="code-text">
+  let birdY = 250
+  let birdVeloY = 0
+  let birdAcceleration = 10
+  let birdSize = 35
+
+  function birdLogic() {
+    if(birdVeloY &lt; 80) { // if bird hasn't hit "terminal" velocity, add gravity to velocity
+      birdVeloY += birdAcceleration
+    }
+
+    birdY += birdVeloY
+  }
+
+  function draw() {
+    birdLogic()
+    ellipse(250, birdY, birdSize) // draw bird
+  }</code></pre>
+    </div>
+    <p class="fs-4">There was a few issues with this iteration, however, as it didn't feel smooth by any metrics and you
+      had to "counterract" gravity as if it were a real bird, something that didn't feel very crisp. </p>
+    <p class="fs-4">This issue turned out to be how the gravity and velocity was being applied to the bird, every time
+      you "flapped" it would simply add a static velocity to your increasingly negative velocity, if you were going down
+      at a rate of say, -30 units per frame, a flap would bring you up to still -20 units per frame, so in order to
+      actually go up, you'd have to flap 4 times (-30 -> -20 -> -10 -> 0 -> 10) This was fixed as following:</p>
+    <div class="container-fluid"> <!-- before and after start-->
+      <div class="beforeandafter row">
+        <div class="col-md-6 col-sm-12">
+          <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+            <h2 class="text-center">Before</h2>
+            <pre><code class="code-text">  function keyPressed() { // flap
+    if(keyCode === 32 && playerInControl && !start) {
+      birdVeloY <span class="red">+</span>= flap
+    }
+  } // keyCode 32 is the spacebar
+            </code></pre>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+            <h2 class="text-center">After</h2>
+            <pre><code class="code-text">  function keyPressed() { // flap
+    if(keyCode === 32 && playerInControl && !start) {
+      birdVeloY = flap
+    }
+  } // keyCode 32 is the spacebar
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </div> <!-- before and after end-->
+    <h2 class="mt-5">Part 2: Pipes and collision</h2>
+    <p class="fs-4">Figuring out the pipes and collision was by far the most difficult part. 
+      Going into it I knew I had to do the following: 
+      ceiling collisions, floor collisions, pipe collisions, and generating pipes.</p>
+    <p class="fs-4">Floor and ceiling was first, and they were fairly simple, 
+      just doing checks if the birds y-value had exceeded the screen or gone below it.
+      I did have to adjust since the bird is a circle, 
+      and the circle is being drawn from the center, 
+      I had to offset by half the birds size for accurate collision detection. This looked as following:</p>
+      <div class="card mx-1 bg-dark text-light border border-secondary border-2">
+        <pre><code class="code-text">
+  if(birdY + birdSize / 2 >= canvasHeight) { // collided with canvas bottom
+    birdY = canvasHeight - birdSize / 2 // stop from going off screen
+    birdVeloY = 0 // set velocity to zero
+    playerInControl = false // remove player control
+    return LOST // return that the player has lost
+  }</code></pre>
+      </div>
+      <p class="fs-4">The pipes on the other hand were much more difficult. 
+        My biggest regret with how I executed this. 
+        I decided to store the pipes in an array that held the following information: 
+        the pipe's X coordinate, the Y coordinate at which the gap for the pipe starts, and whether or not the pipe has passed the bird. 
+        </p>
+      <p class="fs-4">The datatype was just unnecessarily complex is the short of it, 
+        and it made me need to dissect how each rectangle was being drawn to screen relatively,
+      especially because I had to draw 2 rectangles (for both sides of the pipe, see below)</p>
+<div class="card mx-1 bg-dark text-secondary border border-secondary border-2">
+      <pre><code class="code-text">
+  /*
+                   (pipeX, 0) # (pipeX + pipeWidth, 0)
+                              #
+                              #
+  (pipeX, gapStart - pipeGap) # (pipeX + pipeWidth, gapStart - pipeGap)
+
+
+            (pipeX, gapStart) # (pipeX + pipeWidth, gapStart)
+                              #
+                              #
+        (pipeX, canvasHeight) # (pipeX + pipeWidth, canvasHeight)
+  */
+      </code></pre>
+    </div>
+    <p class="fs-4">
+      After figuring out how to draw both pipes correctly, I simply decided to make it so that when a pipe (visually) goes off screen, 
+      it's x component is increased by the width of the screen + the distance to the next pipe so that they're an even space apart from eachother.
+    </p>
+    <p class="fs-4">Originally, the collision between the pipes and the bird was done via the concepts outlined in <a href="https://www.jeffreythompson.org/collision-detection/circle-rect.php">this blogpost</a> by Jeffrey Thompson.
+    That said, either due to my own poor implementation or there being some discrepancies between his example and my use case, I ended up plugging my code into ChatGPT to see the issue and it promptly got rid of a ton of redundant code.</p>
+    <h2 class="mt-5">Part 3: Finishing touches</h2>
+    <p class="fs-4">Finally, now that the 2 basic core mechanics were implemented, it was simply a matter of bringing everything together and styling.
+    <p class="fs-4">I added functions to display a start menu and a restart/play again menu, then added tags to indicate to the program when to display 
+      them/when to give the player control of the bird (hence the earlier "playerInControl" variable.) I then styled the bird using relative positions to the width of the canvas. 
+      This whole game is programmed in such a way that in theory were you to change the size of the window internally it'd still work fine with little to no tweaking values.</p>
+    </p>
+    <p class="fs-4">Upon reaching the end, I realized that I had no score implemented, which is when I added the "passed" parameter to pipes to flag whether or not they had currently passed the bird,
+       I then incremented them and toggled that flag when they passed it.</p>
+    <p class="fs-4">At this point the last thing I actually had to do was tweak the values of the bird size, the gap between the pipes, the space between the pipes, the jump velocity, the gravity amount,
+       and the speed of the pipes. The only thing of note there is I ended up making the pipes speed up relative to the square root of the players score + the starting speed, so it gets more difficult with time.</p>
+       <p class="fs-4">You can view the full source code <a href="flappybirdsc.html">here</a> and play the game <a href="flappybird.html">here</a></p>
+  </div>
+
+  <footer class="text-light bg-dark text-center py-2 fs-5">&copy;2024 All rights reserved</footer>
+  <script type="module" src="./javascripts/main.js"></script>
+</body>
+
+</html>

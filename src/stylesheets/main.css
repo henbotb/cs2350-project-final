@@ -4,7 +4,7 @@
 #main-home-jumbotron {
     background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f');
     height: 500px;
-    background-size: 100%;
+    background-size: cover;
     background-position: center;
 }
 
@@ -20,14 +20,43 @@
     margin-left: 1.25rem;
 }
 
-@media (max-width: 576px) {
-    #main-home-jumbotron {
-        height:576px;
-    }
+.game-thumbnail {
+    height: 230px;
+    object-fit: cover;
+}
+
+.game-info {
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#game1 { background-image: url("../images/pong.png"); }
+#game2 { background-image: url('../images/flappybird.png'); }
+#game3 { background-image: url('../images/snake.png'); }
+#game4 { background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420'); }
+
+.title-text {
+    font-size: 8rem;
 }
 
 @media (max-width: 768px) {
-    #main-home-jumbotron {
-        height: 400px;
+    #main-home-jumbotron, .game-info {
+        height: 300px;
+    }
+
+    .title-text {
+        font-size: 6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    #main-home-jumbotron, .game-info {
+        height: 200px;
+    }
+
+    .title-text {
+        font-size: 4rem;
     }
 }
